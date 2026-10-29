@@ -24,6 +24,4 @@ python main.py
 
 ### Improvements
 
-- no cambio, la animacion de mirar a camara dura muy poco.
-- sonido de colision y fin de partida
-- 
+- guardar el puntaje final luego del cierre de la app.

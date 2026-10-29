@@ -5,7 +5,7 @@ from .utils import load_cover
 from .seal import Seal
 from .kelp import KelpAnimation, KelpPair
 from .button import Button
-from .audio import AudioManager
+from .audio import AudioManager, MUSIC_RESTART_EVENT
 
 class Game:
     MENU, READY, PLAYING, GAME_OVER = "menu", "ready", "playing", "game_over"
@@ -57,6 +57,7 @@ class Game:
         self.state = self.GAME_OVER
         self.game_over_timer = 0.0
         self.best_score = max(self.best_score, self.score)
+        self.audio.play_collision()
 
     def can_restart(self):
         return self.state == self.GAME_OVER and self.game_over_timer >= RESTART_LOCK
@@ -94,6 +95,9 @@ class Game:
                         self.reset()
                 else:
                     self.on_input()
+
+            elif event.type == MUSIC_RESTART_EVENT:
+                self.audio.restart_music()
 
     def on_input(self):
         """Salto / inicio de partida. En menú y Game Over no hace nada."""

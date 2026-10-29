@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Foquita bebé · pixel art 32×16</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#eef3f8;--fg:#12263a;--water:#1b4a73;--line:#12385a;--btn:#fff;--bd:#c5d3e0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1620;--fg:#e6eef6;--btn:#16273a;--bd:#2c4560}}
+:root[data-theme="dark"]{--bg:#0d1620;--fg:#e6eef6;--btn:#16273a;--bd:#2c4560}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;padding:20px 14px}
+main{max-width:760px;margin:0 auto}
+h1{font-size:1.3rem;margin:0 0 4px}
+p{margin:0 0 14px;opacity:.8;font-size:.92rem}
+h2{font-size:.95rem;margin:18px 0 6px}
+.grid{display:grid;grid-template-columns:repeat(32,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.grid.off{gap:0}
+.grid i{aspect-ratio:1;background:var(--water);display:block}
+.bar{display:flex;gap:8px;margin-top:16px}
+button{font:inherit;padding:8px 14px;border-radius:8px;border:1px solid var(--bd);background:var(--btn);color:var(--fg);cursor:pointer}
+</style>
+</head>
+<body>
+<main>
+<h1>Foquita bebé 🦭</h1>
+<p>Sprite de 32×16 píxeles. La cola y la aleta se levantan de forma sincronizada para nadar.</p>
+<h2>Vista lateral</h2>
+<div class="grid" id="a"></div>
+<h2>Cabeza girando hacia la pantalla (dos ojos)</h2>
+<div class="grid" id="b"></div>
+<div class="bar"><button id="pp">Pausa</button><button id="gr">Ocultar cuadrícula</button></div>
+</main>
+<script>
+const W=32,H=16;
+const mk=()=>Array.from({length:H},()=>Array(W).fill('.'));
+const fill=(g,r,a,b,c='w')=>{for(let x=a;x<=b;x++)g[r][x]=c};
+const base=mk();
+fill(base,4,21,25);fill(base,5,19,27);fill(base,6,12,27);fill(base,7,9,28);
+fill(base,8,7,28);fill(base,9,6,28);fill(base,10,6,28);
+fill(base,11,7,20);fill(base,11,21,27,'g');fill(base,12,9,25,'g');fill(base,13,12,21,'g');
+// [fila, x0, x1] por nivel: 0 abajo, 1 medio, 2 arriba
+const tail=[[[10,3,5],[11,2,4]],[[9,2,5]],[[8,4,6],[7,3,5],[6,2,4]]];
+const flip=[[[9,16,18],[10,14,16],[11,13,14]],[[9,14,18]],[[9,17,18],[8,15,17],[7,13,15]]];
+const L=[0,1,2,1], S=[-1,0,1,0];
+const col={'.':'',w:'#ffffff',g:'#c3d6e8',f:'#9fbfda',k:'#10151c',p:'#ff9fb2'};
+function frame(mode,i){
+  const g=base.map(r=>r.slice());
+  tail[L[i]].forEach(([r,a,b])=>{fill(g,r,a,b);g[r][a]='g'});
+  flip[L[i]].forEach(([r,a,b])=>fill(g,r,a,b,'f'));
+  if(mode===0){g[6][25]='k';g[7][26]='p';g[8][29]='k';}
+  else{
+    const cx=24,cy=7,fx=cx+S[i];
+    for(let y=0;y<H;y++)for(let x=0;x<W;x++)
+      if(((x-cx)/5.5)**2+((y-cy)/4.5)**2<=1)g[y][x]='w';
+    g[cy-1][fx-2]='k';g[cy-1][fx+2]='k';
+    g[cy+1][fx-1]='k';g[cy+1][fx]='k';
+    g[cy+2][fx-3]='p';g[cy+2][fx+3]='p';
+  }
+  return g;
+}
+function build(id){
+  const el=document.getElementById(id),cells=[];
+  for(let k=0;k<W*H;k++){const c=document.createElement('i');el.appendChild(c);cells.push(c)}
+  return cells;
+}
+const A=build('a'),B=build('b');
+function draw(cells,g){let k=0;for(let y=0;y<H;y++)for(let x=0;x<W;x++)cells[k++].style.background=col[g[y][x]]}
+let i=0,run=true;
+function tick(){draw(A,frame(0,i));draw(B,frame(1,i));i=(i+1)%4}
+tick();setInterval(()=>{if(run)tick()},230);
+document.getElementById('pp').onclick=e=>{run=!run;e.target.textContent=run?'Pausa':'Reanudar'};
+document.getElementById('gr').onclick=e=>{
+  const off=document.getElementById('a').classList.toggle('off');
+  document.getElementById('b').classList.toggle('off',off);
+  e.target.textContent=off?'Mostrar cuadrícula':'Ocultar cuadrícula';
+};
+</script>
+</body>
+</html>

@@ -7,12 +7,12 @@ class Seal(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.idle_frames = [
-            load_image("foca-perfil-1.png", scale=PIXEL_SCALE),
-            load_image("foca-perfil-2.png", scale=PIXEL_SCALE),
+            load_image("sprites/foca-perfil-1.png", scale=PIXEL_SCALE),
+            load_image("sprites/foca-perfil-2.png", scale=PIXEL_SCALE),
         ]
         self.look_frames = [
-            load_image("foca-perfil-mirando-1.png", scale=PIXEL_SCALE),
-            load_image("foca-perfil-mirando-2.png", scale=PIXEL_SCALE),
+            load_image("sprites/foca-perfil-mirando-1.png", scale=PIXEL_SCALE),
+            load_image("sprites/foca-perfil-mirando-2.png", scale=PIXEL_SCALE),
         ]
         self.reset()
 

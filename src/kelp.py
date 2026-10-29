@@ -7,7 +7,7 @@ class KelpAnimation:
     """Recursos compartidos por todos los obstáculos (se crea una sola vez)."""
 
     def __init__(self):
-        sprites, self.durations = load_gif_frames("alga-idle-16x48.gif", scale=PIXEL_SCALE)
+        sprites, self.durations = load_gif_frames("sprites/alga-idle-16x48.gif", scale=PIXEL_SCALE)
         self.width = sprites[0].get_width()
 
         # Columna de alto completo por frame (punta arriba, tronco repetido)

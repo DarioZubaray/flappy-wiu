@@ -33,7 +33,7 @@ KELP_BODY_ROWS = 8     # filas (del sprite original) que se repiten hacia abajo
 RESTART_LOCK = 0.6   # segundos que no se puede reiniciar tras perder
 
 # Musica & Audio
-JUMP_SOUND = "freesound_community-cartoon-jump-6462.mp3"
-MUSIC_FILE = "Seal Arpeggio.mp3"
+JUMP_SOUND = "sfx/freesound_community-cartoon-jump-6462.mp3"
+MUSIC_FILE = "music/Seal Arpeggio.mp3"
 JUMP_VOLUME = 0.6
 MUSIC_VOLUME = 0.4

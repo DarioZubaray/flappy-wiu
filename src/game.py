@@ -7,7 +7,6 @@ from .kelp import KelpAnimation, KelpPair
 from .button import Button
 from .audio import AudioManager
 
-
 class Game:
     MENU, READY, PLAYING, GAME_OVER = "menu", "ready", "playing", "game_over"
 
@@ -21,7 +20,7 @@ class Game:
         self.small_font = pygame.font.Font(None, 24)
         self.debug = DEBUG
 
-        self.background = load_cover("bg.jpg", (WIDTH, HEIGHT))
+        self.background = load_cover("sprites/bg.jpg", (WIDTH, HEIGHT))
         self.kelp_anim = KelpAnimation()   # requiere display ya creado
         self.seal = Seal()
         self.audio = AudioManager()

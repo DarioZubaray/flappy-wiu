@@ -14,6 +14,8 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Flappy Wiu")
+        programIcon = pygame.image.load('assets/sprites/flappi-wiu-icon.png')
+        pygame.display.set_icon(programIcon)
         self.clock = pygame.time.Clock()
         self.title_font = pygame.font.Font(None, 72)
         self.font = pygame.font.Font(None, 48)

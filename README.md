@@ -2,7 +2,9 @@
 
 "Flappy Wiu" es un clon del popular juego [Flappy Bird](https://es.wikipedia.org/wiki/Flappy_Bird) pero en este caso protagonizado por una foca, hecho con **pygame-ce**, en pixel art y con ventana vertical de 360x640 (proporcional a un celular). 
 
-Es una app de escritorio, pero todo está pensado para que funcione con un solo gesto (click o tap). 
+Es una app de escritorio, pero todo está pensado para que funcione con un solo gesto (click o tap).
+
+![Flappy wiu](./assets/demo.gif)
 
 El requisito de diseño de partida fue **programación orientada a objetos**: `main.py` solo arranca, y cada responsabilidad vive en su propia clase.
 

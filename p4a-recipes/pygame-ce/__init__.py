@@ -78,6 +78,29 @@ class PygameCERecipe(CompiledComponentsPythonRecipe):
             )
             open("pyproject.toml", "w").write(pyproject)
 
+            # PEP 517 execs setup.py with sys.path lacking the source dir
+            # (so `import buildconfig` fails) and sys.argv[0] pointing at the
+            # hook script (so setup.py's chdir(dirname(argv[0])) lands in the
+            # wrong dir). Mimic `python setup.py` for both.
+            setup_py = open("setup.py").read()
+            if "sys.path.insert(0, os.path.dirname" not in setup_py:
+                setup_py = (
+                    "import os, sys\n"
+                    "sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))\n"
+                    "sys.argv[0] = __file__\n"
+                    + setup_py
+                )
+                open("setup.py", "w").write(setup_py)
+            elif "sys.argv[0] = __file__" not in setup_py:
+                # cached copy from an older recipe revision: add missing line
+                setup_py = setup_py.replace(
+                    "sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))\n",
+                    "sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))\n"
+                    "sys.argv[0] = __file__\n",
+                    1,
+                )
+                open("setup.py", "w").write(setup_py)
+
     def get_recipe_env(self, arch):
         env = super().get_recipe_env(arch)
         env['USE_SDL2'] = '1'

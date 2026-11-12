@@ -21,6 +21,7 @@ android.ndk = 25b
 android.ndk_api = 21
 android.archs = arm64-v8a
 android.debug_artifact = apk
+android.accept_sdk_license = True
 p4a.local_recipes = ./p4a-recipes
 p4a.branch = v2026.05.09
 icon.filename = %(source.dir)s/assets/sprites/flappi-wiu-icon.png

@@ -1,3 +1,4 @@
+import re
 from os.path import join
 
 from pythonforandroid.recipe import CompiledComponentsPythonRecipe
@@ -60,6 +61,22 @@ class PygameCERecipe(CompiledComponentsPythonRecipe):
                 freetype_includes=""
             )
             open("Setup", "w").write(setup_file)
+
+            # pygame-ce 2.5.x uses the meson-python backend, which cannot
+            # cross-compile for Android (its sanity check tries to *run* an
+            # arm64 binary). Force the setuptools backend so `pip install .`
+            # goes through setup.py instead.
+            pyproject = open("pyproject.toml").read()
+            pyproject = re.sub(
+                r"\[build-system\].*?(?=\n\[|\Z)",
+                '[build-system]\n'
+                'requires = ["setuptools>=61", "cython<=3.2.9"]\n'
+                'build-backend = "setuptools.build_meta"\n\n',
+                pyproject,
+                count=1,
+                flags=re.S,
+            )
+            open("pyproject.toml", "w").write(pyproject)
 
     def get_recipe_env(self, arch):
         env = super().get_recipe_env(arch)

@@ -1,0 +1,60 @@
+name: Build APK
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Cache Buildozer
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.buildozer
+            .buildozer
+          key: buildozer-apk-${{ runner.os }}-${{ hashFiles('buildozer.spec', 'p4a-recipes/**') }}
+          restore-keys: |
+            buildozer-apk-${{ runner.os }}-
+
+      - name: Clean corrupted p4a cache
+        run: |
+          rm -rf .buildozer/android/platform/python-for-android
+          rm -rf ~/.buildozer/android/platform/python-for-android
+
+      - name: Build APK
+        run: |
+          set -o pipefail
+          docker run --rm \
+            -e BUILDOZER_WARN_ON_ROOT=0 \
+            -v "${{ github.workspace }}:/app:Z" \
+            -v "$HOME/.buildozer:/home/user/.buildozer:Z" \
+            -w /app \
+            kivy/buildozer:latest \
+            android debug -v 2>&1 | tee buildozer.log
+
+      - name: Upload APK artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flappy-wiu-apk
+          path: bin/*.apk
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: buildozer-log
+          path: buildozer.log
+          retention-days: 30
+          if-no-files-found: ignore

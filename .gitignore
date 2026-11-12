@@ -1,2 +1,12 @@
 .venv/
 src/__pycache__
+__pycache__/
+*.pyc
+
+# Buildozer / Android
+.buildozer/
+buildozer-global/
+bin/
+*.apk
+*.aab
+buildozer.log

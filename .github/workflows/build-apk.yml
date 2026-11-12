@@ -39,7 +39,7 @@ jobs:
             -v "$HOME/.buildozer:/home/user/.buildozer:Z" \
             -w /app \
             kivy/buildozer:latest \
-            android debug -v 2>&1 | tee buildozer.log
+            -v android debug 2>&1 | tee buildozer.log
 
       - name: Upload APK artifact
         if: success()
